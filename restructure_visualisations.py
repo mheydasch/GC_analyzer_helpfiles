@@ -8,12 +8,16 @@ Created on Fri Nov 16 15:17:42 2018
 
 '''
 takes all segmentation representations burried deep in the folder of the GC output
-and moves all of them to a single folder
+and copies all of them to a single folder
+moves all directories for which no segmentation could be found to a 'Not_segmented'
+directory
 
 '''
 import os
 import re
 from shutil import copyfile
+from shutil import move
+
 import argparse
 path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
 
@@ -43,30 +47,46 @@ def get_move_paths(path):
     newdir=path+'Collection'
     oldfiles=[]
     newfiles=[]
+    KD_pattern=re.compile('[A-Za-z0-9]+')
+    #FOV_pattern=re.compile('[0-9]+')
     for i in onlydirs:
         #dont look in collection folder
-        if i != newdir:
-            
-            #look in each folder and create a list of the paths, if it is a folder
-            i_dirs=[os.path.join(i, folder) for folder in os.listdir(i) if os.path.isdir(os.path.join(i, folder))]
-            for item in i_dirs:
-                #get the identifier from the folder
-                pathlist=vars()['item'].split('/')
-                identifier=pathlist[-2]+'_'+pathlist[-1]
-                #get the folder inside
-                i_path=item+'/Channels/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1/'
-                
-                try:
-                    oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                              if re.search(tifind, f) is not None ]
-                    newfiles=[os.path.join(newdir, identifier+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                              if re.search(tifind, f) is not None ]
+        if i != newdir and 'Flatfield' not in i and 'Not_segmented' not in i:
+            foldername = vars()['i'].split('/')[-1]
+            matched_foldername=re.match(KD_pattern, foldername)
+            if matched_foldername is not None:                           
+                #look in each folder and create a list of the paths, if it is a folder
+                i_dirs=[os.path.join(i, folder) for folder in os.listdir(i) if os.path.isdir(os.path.join(i, folder))]
+                for item in i_dirs:
+                    #get the identifier from the folder
+                    pathlist=vars()['item'].split('/')
+                    identifier=pathlist[-2]+'_'+pathlist[-1]
+                    #get the folder inside
+                    i_path=item+'/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
                     
-                except (NotADirectoryError, FileNotFoundError) as e :
-                    print(i_path)
-                    next
-                [oldpath.append(f) for f in oldfiles]
-                [newpath.append(f) for f in newfiles]
+                    try:
+                        oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                                  if re.search(tifind, f) is not None ]
+                        newfiles=[os.path.join(newdir, identifier+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                                  if re.search(tifind, f) is not None ]
+                        
+                    except (NotADirectoryError, FileNotFoundError) as e :
+                        print('Error in', i_path, '\n', 'no segmentation found')
+                        
+                        dump=os.path.join(path+'Not_segmented/')
+                        createFolder(dump)
+                        dump2nd=os.path.join(dump+foldername+'/')
+                        print(item, 'moved to', dump2nd)
+                        createFolder(dump2nd)
+                        #final_dump=(dump2nd+pathlist[-1])
+                        #print(final_dump)
+                        #createFolder(final_dump)
+                        move(item, dump2nd)
+                        
+                        
+                        next
+                    [oldpath.append(f) for f in oldfiles]
+                    [newpath.append(f) for f in newfiles]
     #print(oldpath, newpath)
     return oldpath, newpath
 
