@@ -65,6 +65,8 @@ def get_move_paths(path):
                     #get the identifier from the folder
                     pathlist=vars()['item'].split('/')
                     identifier=pathlist[-2]+'_'+pathlist[-1]
+                    i_path=item+'/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
+
                     #get the folder inside                                      
                     try:
                         oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
