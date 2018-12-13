@@ -76,7 +76,7 @@ def get_move_paths(path):
                         dump=os.path.join(path+'Not_segmented/')
                         createFolder(dump)
                         dump2nd=os.path.join(dump+foldername+'/')
-                        print(item, 'moved to', dump2nd)
+                        print(item, 'moved to', dump2nd + '\n')
                         createFolder(dump2nd)
                         #final_dump=(dump2nd+pathlist[-1])
                         #print(final_dump)
