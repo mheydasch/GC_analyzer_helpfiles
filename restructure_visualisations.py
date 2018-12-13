@@ -117,12 +117,15 @@ def move_errors(errors):
         seg_dump=os.path.join(path, 'segmentation_errors')
         createFolder(seg_dump)
         for i in lines:
-            item=os.path.join(path, i)
-            kd = vars()['i'].split('/')[-2]        
-            kd_dump=os.path.join(seg_dump, kd)
-            createFolder(kd_dump)            
-            move(item, kd_dump)
-            print(item, 'was moved to', kd_dump, '\n')
+            try:
+                item=os.path.join(path, i)
+                kd = vars()['i'].split('/')[-2]        
+                kd_dump=os.path.join(seg_dump, kd)
+                createFolder(kd_dump)            
+                move(item, kd_dump)
+                print(item, 'was moved to', kd_dump, '\n')
+            except Exception as e:
+                print(e)
 
 #%%%
 if __name__ == '__main__':
