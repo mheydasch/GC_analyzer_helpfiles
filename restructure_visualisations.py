@@ -11,6 +11,8 @@ takes all segmentation representations burried deep in the folder of the GC outp
 and copies all of them to a single folder
 moves all directories for which no segmentation could be found to a 'Not_segmented'
 directory
+with the -e option it accepts a text file as second input and moves all folders 
+annotated in that file to a segmentation error directory.
 
 '''
 import os
@@ -27,6 +29,7 @@ def parseArguments():
   # Define the parser and read arguments
   parser = argparse.ArgumentParser(description='collect segmentation files into one directory')
   parser.add_argument('-d', '--dir', type=str, help='The directory where the knockdown folders are', required=True)
+  parser.add_argument('-e', '--errors', type=str, help='The file from which to read segmentation errors', required=False)
   args = parser.parse_args()
   return(args)
 
@@ -38,6 +41,7 @@ def createFolder(directory):
         print ('Error: Creating directory. ' + directory)
 #%%
 #for filepath in glob.glob(path + '*{}'.format(identifier))
+        
 def get_move_paths(path):
     createFolder(path+'/Collection')
     onlydirs=[os.path.join(path, f) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
@@ -51,7 +55,7 @@ def get_move_paths(path):
     #FOV_pattern=re.compile('[0-9]+')
     for i in onlydirs:
         #dont look in collection folder
-        if i != newdir and 'Flatfield' not in i and 'Not_segmented' not in i and 'HierarchicalCluster' not in i:
+        if i != newdir and 'Flatfield' not in i and 'Not_segmented' not in i and 'HierarchicalCluster' not in i and 'segmentation_errors' not in i:
             foldername = vars()['i'].split('/')[-1]
             matched_foldername=re.match(KD_pattern, foldername)
             if matched_foldername is not None:                           
@@ -61,13 +65,11 @@ def get_move_paths(path):
                     #get the identifier from the folder
                     pathlist=vars()['item'].split('/')
                     identifier=pathlist[-2]+'_'+pathlist[-1]
-                    #get the folder inside
-                    i_path=item+'/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
-                    
+                    #get the folder inside                                      
                     try:
                         oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                                   if re.search(tifind, f) is not None ]
-                        newfiles=[os.path.join(newdir, identifier+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                        newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                                   if re.search(tifind, f) is not None ]
                         
                     except (NotADirectoryError, FileNotFoundError) as e :
@@ -75,15 +77,10 @@ def get_move_paths(path):
                         
                         dump=os.path.join(path+'Not_segmented/')
                         createFolder(dump)
-                        dump2nd=os.path.join(dump+foldername+'/')
-                        print(item, 'moved to', dump2nd + '\n')
-                        createFolder(dump2nd)
-                        #final_dump=(dump2nd+pathlist[-1])
-                        #print(final_dump)
-                        #createFolder(final_dump)
-                        move(item, dump2nd)
-                        
-                        
+                        final_dump=os.path.join(dump+foldername+'/')
+                        print(item, 'moved to', final_dump, '\n')
+                        createFolder(final_dump)
+                        move(item, final_dump)            
                         next
                     [oldpath.append(f) for f in oldfiles]
                     [newpath.append(f) for f in newfiles]
@@ -101,12 +98,39 @@ def copy_file(path):
             if vars()['i1'].split('/')[-7] in vars()['i2'].split('/')[-1]:
                 copyfile(i1, i2)
 
+def read_text(errors):
+    '''
+    reads in a textfile with the names of folders that have segmentation errors.
+    '''
+    file= open(errors, 'r')
+    #creates a list of lines from the file
+    lines=file.readlines()
+    for n, i in enumerate(lines):        
+        lines[n]=i.replace('\n', '')    
+    return lines
 
+def move_errors(errors):
+    lines=read_text(errors)
+    if len(lines)>0:
+        seg_dump=os.path.join(path, 'segmentation_errors')
+        createFolder(seg_dump)
+        for i in lines:
+            item=os.path.join(path, i)
+            kd = vars()['i'].split('/')[-2]        
+            kd_dump=os.path.join(seg_dump, kd)
+            createFolder(kd_dump)            
+            move(item, kd_dump)
+            print(item, 'was moved to', kd_dump, '\n')
 
+#%%%
 if __name__ == '__main__':
     args=parseArguments()
     path=args.dir
-    copy_file(path)
+    errors=args.errors
+    if errors is None:
+        copy_file(path)
+    else:
+        move_errors(errors)
     print(args)
 
 
