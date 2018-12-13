@@ -51,7 +51,7 @@ def get_move_paths(path):
     #FOV_pattern=re.compile('[0-9]+')
     for i in onlydirs:
         #dont look in collection folder
-        if i != newdir and 'Flatfield' not in i and 'Not_segmented' not in i:
+        if i != newdir and 'Flatfield' not in i and 'Not_segmented' not in i and 'HierarchicalCluster' not in i:
             foldername = vars()['i'].split('/')[-1]
             matched_foldername=re.match(KD_pattern, foldername)
             if matched_foldername is not None:                           
