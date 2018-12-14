@@ -105,9 +105,9 @@ def create_parameter_call():
     
     #dictionary telling the loaction for the parameter files, based on the input
     #needs to be adjusted if changes occur.      
-    parameter_files={'40x': '/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/parameter_files/GCALoadParameters_40XLifeAct.m',
-                     '60x' : '/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/helpFilesForMax/60X/KDGEF28/20180628/02/ParameterFile/GCALoadParameters_Defaults_60XforMax.m',
-                     'FRET' : '/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/parameter_files/GCALoadParameters_60x_mult_channels.m'}
+    parameter_files={'40x': '\'/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/parameter_files/GCALoadParameters_40XLifeAct.m\'',
+                     '60x' : '\'/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/helpFilesForMax/60X/KDGEF28/20180628/02/ParameterFile/GCALoadParameters_Defaults_60XforMax.m\'',
+                     'FRET' : '\'/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/parameter_files/GCALoadParameters_60x_mult_channels.m\''}
     if modality in parameter_files:
         #part of the final matlab call!
         parameter_call="\'parameterMfile\', " +parameter_files[modality] +')); quit\"'
@@ -152,7 +152,6 @@ def create_batch_file(dir):
         f.write('#SBATCH -o job_files/out/Analyzer-%A_%a.out'+'\n')
         f.write('#SBATCH -e job_files/err/Analyzer-%A_%a.err'+'\n')
         f.write('\n')
-        f.write('STRING_CALL=`cat job_files/job_${SLURM_ARRAY_TASK_ID}.txt`' + '\n')
         f.write(call)
 
         
