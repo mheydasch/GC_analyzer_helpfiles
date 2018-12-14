@@ -149,9 +149,9 @@ def create_batch_file(dir):
         f.write('#SBATCH --array=1-{}'.format(len(listfiles))+'\n')
         f.write('#SBATCH --mem=50000'+'\n')
         f.write('#SBATCH -t 6:00:00'+'\n')
-        f.write('#SBATCH -o job_files/out/Analyzer-%A_%a.out'+'\n')
-        f.write('#SBATCH -e job_files/err/Analyzer-%A_%a.err'+'\n')
-        f.write('\n')
+        #f.write('#SBATCH -o job_files/out/Analyzer-%A_%a.out'+'\n')
+        #f.write('#SBATCH -e job_files/err/Analyzer-%A_%a.err'+'\n')
+        #f.write('\n')
         f.write('cat job_files/job_${SLURM_ARRAY_TASK_ID}.txt' + '\n')
 
         
@@ -162,8 +162,8 @@ if __name__ == '__main__':
     modality=args.modality   
     shade_correction=args.shade_correction
     os.makedirs('job_files', exist_ok=True)
-    os.makedirs('job_files/out', exist_ok=True)
-    os.makedirs('job_files/err', exist_ok=True)
+    #os.makedirs('job_files/out', exist_ok=True)
+    #os.makedirs('job_files/err', exist_ok=True)
    
     for n, call in enumerate(create_matlab_call()):
         with(open('job_files/job_{}.txt'.format(n), 'w+')) as fjob:
