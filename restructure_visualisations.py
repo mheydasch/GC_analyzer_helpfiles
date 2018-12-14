@@ -56,7 +56,7 @@ def get_move_paths(path):
     for i in onlydirs:
         #dont look in collection folder
         foldername= vars()['i'].split('/')[-1]
-        if foldername != 'Collection' and foldername!= 'Flatfield' and foldername!= 'Not_segmented'  and foldername!= 'HierarchicalCluster' nand foldername!= 'segmentation_errors':
+        if foldername != 'Collection' and foldername!= 'Flatfield' and foldername!= 'Not_segmented'  and foldername!= 'HierarchicalCluster' and foldername!= 'segmentation_errors':
             matched_foldername=re.match(KD_pattern, foldername)
             if matched_foldername is not None:                           
                 #look in each folder and create a list of the paths, if it is a folder
