@@ -131,7 +131,7 @@ def create_matlab_call():
             matlab_call= 'srun /opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
             calls.append(matlab_call)
         else:
-            function_call='\"run(GcaRunFullPipleline(\'multChannels\', true, \'ChannelDirectory\', {}, \'OutputDirectory\', {}, {}'.format(i+'/Channels/', i+'/', create_parameter_call())
+            function_call='\"run(GcaRunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', {}, \'OutputDirectory\', {}, {}'.format(i+'/Channels/', i+'/', create_parameter_call())
             matlab_call= '/opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
             calls.append(matlab_call)
     return calls
@@ -149,13 +149,13 @@ def create_batch_file(dir):
         f.write('#SBATCH --array=1-{}'.format(len(listfiles))+'\n')
         f.write('#SBATCH --mem=50000'+'\n')
         f.write('#SBATCH -t 6:00:00'+'\n')
-        f.write('OIFS="$IFS"')
-        f.write('IFS=$\'\n\'')
+        #f.write('OIFS="$IFS"')
+        #f.write('IFS=$\'\n\'')
         #f.write('#SBATCH -o job_files/out/Analyzer-%A_%a.out'+'\n')
         #f.write('#SBATCH -e job_files/err/Analyzer-%A_%a.err'+'\n')
         #f.write('\n')
         f.write('cat job_files/job_${SLURM_ARRAY_TASK_ID}.txt' + '\n')
-        f.write('IFS="$OIFS"')
+        #f.write('IFS="$OIFS"')
         
 #%%        
 if __name__ == '__main__':
