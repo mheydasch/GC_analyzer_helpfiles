@@ -127,11 +127,11 @@ def create_matlab_call():
     calls=[]
     for i in get_folders():
         if modality=='biosensors':
-            function_call='\"run(GCARunBiosensorAnalysis(\'InputPath\', {}, {}'.format(i + 'GrowthConeAnalyzer/movieData.mat', create_parameter_call())  
+            function_call='\"run(GCARunBiosensorAnalysis(\'InputPath\', \'{}\', {}'.format(i + 'GrowthConeAnalyzer/movieData.mat', create_parameter_call())  
             matlab_call= 'srun /opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
             calls.append(matlab_call)
         else:
-            function_call='\"run(GcaRunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', {}, \'OutputDirectory\', {}, {}'.format(i+'/Channels/', i+'/', create_parameter_call())
+            function_call='\"run(GcaRunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', \'{}\', \'OutputDirectory\', \'{}\', {}'.format(i+'/Channels/', i+'/', create_parameter_call())
             matlab_call= '/opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
             calls.append(matlab_call)
     return calls
