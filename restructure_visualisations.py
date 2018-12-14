@@ -50,6 +50,7 @@ def go_one_up(path):
     one_up='/'+split_path[0]
     for n, i in enumerate(split_path[:-3]):
         one_up=one_up=os.path.join(one_up, split_path[n+1])
+    one_up=one_up+'/'
     return one_up
 
 #%%
