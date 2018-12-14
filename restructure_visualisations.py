@@ -73,7 +73,7 @@ def get_move_paths(path):
                                   if re.search(tifind, f) is not None ]
                         newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                                   if re.search(tifind, f) is not None ]
-                        print('copying', f ,'files to', path + 'Collection')
+                        
                         
                     except (NotADirectoryError, FileNotFoundError) as e :
                         print('Error in', i_path, '\n', 'no segmentation found')
