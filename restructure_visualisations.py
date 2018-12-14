@@ -55,8 +55,8 @@ def get_move_paths(path):
     #FOV_pattern=re.compile('[0-9]+')
     for i in onlydirs:
         #dont look in collection folder
-        if i != newdir and 'Flatfield' not in i and 'Not_segmented' not in i and 'HierarchicalCluster' not in i and 'segmentation_errors' not in i:
-            foldername = vars()['i'].split('/')[-1]
+        foldername= vars()['i'].split('/')[-1]
+        if foldername != 'Collection' and foldername!= 'Flatfield' and foldername!= 'Not_segmented'  and foldername!= 'HierarchicalCluster' nand foldername!= 'segmentation_errors':
             matched_foldername=re.match(KD_pattern, foldername)
             if matched_foldername is not None:                           
                 #look in each folder and create a list of the paths, if it is a folder
@@ -66,14 +66,14 @@ def get_move_paths(path):
                     pathlist=vars()['item'].split('/')
                     identifier=pathlist[-2]+'_'+pathlist[-1]
                     i_path=item+'/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
-                    print(i_path)
+                    
                     #get the folder inside                                      
                     try:
                         oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                                   if re.search(tifind, f) is not None ]
                         newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                                   if re.search(tifind, f) is not None ]
-                        print('copying png files to', path + 'Collection')
+                        print('copying', f ,'files to', path + 'Collection')
                         
                     except (NotADirectoryError, FileNotFoundError) as e :
                         print('Error in', i_path, '\n', 'no segmentation found')
