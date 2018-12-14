@@ -154,8 +154,9 @@ def create_batch_file(dir):
         #f.write('#SBATCH -o job_files/out/Analyzer-%A_%a.out'+'\n')
         #f.write('#SBATCH -e job_files/err/Analyzer-%A_%a.err'+'\n')
         f.write('\n')
-        f.write('call=cat job_files/job_${SLURM_ARRAY_TASK_ID}.txt' + '\n')
-        f.write('$call')
+        f.write('chmod +x job_files/job_${SLURM_ARRAY_TASK_ID}.txt)
+        f.write('job_files/job_${SLURM_ARRAY_TASK_ID}.txt' + '\n')
+        #f.write('$call')
         #f.write('IFS="$OIFS"')
         
 #%%        
