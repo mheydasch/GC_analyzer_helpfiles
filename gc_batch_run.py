@@ -169,7 +169,7 @@ if __name__ == '__main__':
     #os.makedirs('job_files/err', exist_ok=True)
    
     for n, call in enumerate(create_matlab_call()):
-        with(open('job_files/job_{}.txt'.format(n), 'w+')) as fjob:
+        with(open('job_files/job_{}.txt'.format(n+1), 'w+')) as fjob:
             fjob.write(call)
       # Use all job files to create a batch file
     create_batch_file('job_files/')
