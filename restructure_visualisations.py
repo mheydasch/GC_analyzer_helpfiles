@@ -21,7 +21,7 @@ from shutil import copyfile
 from shutil import move
 
 import argparse
-path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
+#path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
 
 
 
@@ -41,6 +41,18 @@ def createFolder(directory):
         print ('Error: Creating directory. ' + directory)
 #%%
 #for filepath in glob.glob(path + '*{}'.format(identifier))
+def go_one_up(path):
+    '''
+    takes one folder upwards of the given input folder
+    '''
+  
+    split_path=vars()['path'].split('/')
+    one_up='/'+split_path[0]
+    for n, i in enumerate(split_path[:-3]):
+        one_up=one_up=os.path.join(one_up, split_path[n+1])
+    return one_up
+
+#%%
         
 def get_move_paths(path):
     createFolder(path+'/Collection')
@@ -52,6 +64,7 @@ def get_move_paths(path):
     oldfiles=[]
     newfiles=[]
     KD_pattern=re.compile('[A-Za-z0-9]+')
+    one_up=go_one_up(path)
     #FOV_pattern=re.compile('[0-9]+')
     for i in onlydirs:
         #dont look in collection folder
@@ -78,7 +91,7 @@ def get_move_paths(path):
                     except (NotADirectoryError, FileNotFoundError) as e :
                         print('Error in', i_path, '\n', 'no segmentation found')
                         
-                        dump=os.path.join(path+'Not_segmented/')
+                        dump=os.path.join(one_up+'Not_segmented/')
                         createFolder(dump)
                         final_dump=os.path.join(dump+foldername+'/')
                         print(item, 'moved to', final_dump, '\n')
@@ -114,12 +127,13 @@ def read_text(errors):
 
 def move_errors(errors):
     lines=read_text(errors)
+    one_up=go_one_up(path)
     if len(lines)>0:
-        seg_dump=os.path.join(path, 'segmentation_errors')
+        seg_dump=os.path.join(one_up, 'segmentation_errors')
         createFolder(seg_dump)
         for i in lines:
             try:
-                item=os.path.join(path, i)
+                item=os.path.join(one_up, i)
                 kd = vars()['i'].split('/')[-2]        
                 kd_dump=os.path.join(seg_dump, kd)
                 createFolder(kd_dump)            
@@ -128,11 +142,13 @@ def move_errors(errors):
             except Exception as e:
                 print(e)
 
+    
 #%%%
 if __name__ == '__main__':
     args=parseArguments()
     path=args.dir
     errors=args.errors
+    
     if errors is None:
         copy_file(path)
     else:
