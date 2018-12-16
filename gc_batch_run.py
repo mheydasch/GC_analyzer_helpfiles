@@ -174,11 +174,8 @@ if __name__ == '__main__':
    
     for n, call in enumerate(create_matlab_call()):
         with(open('job_files/job_{}.txt'.format(n+1), 'w+')) as fjob:
-            fjob.write('call={}'.format(call))
-            fjob.write('\n')
-            fjob.write('echo $call')
-            fjob.write('\n')
-            fjob.write('$call')
+            fjob.write(call)
+
       # Use all job files to create a batch file
     create_batch_file('job_files/')
 
