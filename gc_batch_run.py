@@ -82,18 +82,19 @@ def get_folders():
         if 'Flatfield' not in k:            
             foldername = vars()['k'].split('/')[-1]
             foldername=re.match(KD_pattern, foldername)
-            if foldername is not None:
+            if foldername is not None and os.path.isdir(k):
                 Wellfolders.append(k)
     #find all folders in the Wellfolders
     for well in Wellfolders:
-        for i in os.listdir(well):
-            i=os.path.join(well, i)        
-            if os.path.isdir(i):
-                foldername = vars()['i'].split('/')[-1]
-                foldername=re.match(FOV_pattern, foldername)
-                if foldername is not None:
-                    if os.path.isdir(i):
-                        Fovfolders.append(i)
+        if os.path.isdir(well):
+            for i in os.listdir(well):
+                i=os.path.join(well, i)        
+                if os.path.isdir(i):
+                    foldername = vars()['i'].split('/')[-1]
+                    foldername=re.match(FOV_pattern, foldername)
+                    if foldername is not None:
+                        if os.path.isdir(i):
+                            Fovfolders.append(i)
     return Fovfolders
 #%%            
 def create_parameter_call():
