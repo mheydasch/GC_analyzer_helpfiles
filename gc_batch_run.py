@@ -113,9 +113,9 @@ def create_parameter_call():
         #part of the final matlab call!
         parameter_call="\'parameterMfile\', " +parameter_files[modality] +')); quit\"'
     if modality.startswith('/'):
-        parameter_call="\'parameterMfile\', " + modality +'); quit\"' 
+        parameter_call="\'parameterMfile\', " + modality +')); quit\"' 
     if modality=='biosensors':
-        parameter_call="'InputDirFF', " + shade_correction +'); quit\"'
+        parameter_call="'InputDirFF', " + shade_correction +')); quit\"'
     
     return parameter_call
 
@@ -174,8 +174,11 @@ if __name__ == '__main__':
    
     for n, call in enumerate(create_matlab_call()):
         with(open('job_files/job_{}.txt'.format(n+1), 'w+')) as fjob:
-            fjob.write('echo \"{}\" \n'.format(call))
-            fjob.write(call)
+            fjob.write('call={}'.format(call))
+            fjob.write('\n')
+            fjob.write('echo $call')
+            fjob.write('\n')
+            fjob.write('$call')
       # Use all job files to create a batch file
     create_batch_file('job_files/')
 
