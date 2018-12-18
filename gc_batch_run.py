@@ -115,7 +115,7 @@ def create_parameter_call():
     if modality.startswith('/'):
         parameter_call="\'parameterMfile\', " + "\'" + modality+"\'" +')); quit\"' 
     if modality=='biosensors':
-        parameter_call="'InputDirFF', " + "\'" + shade_correction+"\'" +')); quit\"'
+        parameter_call="\'InputDirFF\', " + "\'" + shade_correction+"\'" +')); quit\"'
     
     return parameter_call
 
