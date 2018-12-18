@@ -134,7 +134,7 @@ def move_errors(errors):
         createFolder(seg_dump)
         for i in lines:
             try:
-                item=os.path.join(one_up, i)
+                item=os.path.join(path, i)
                 kd = vars()['i'].split('/')[-2]        
                 kd_dump=os.path.join(seg_dump, kd)
                 createFolder(kd_dump)            
