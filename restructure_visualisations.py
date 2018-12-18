@@ -54,55 +54,95 @@ def go_one_up(path):
     return one_up
 
 #%%
-        
 def get_move_paths(path):
-    createFolder(path+'/Collection')
-    onlydirs=[os.path.join(path, f) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
-    oldpath=[]
-    newpath=[]
     tifind=re.compile('.png')
-    newdir=path+'Collection'
+    findfile='movieData.mat'
     oldfiles=[]
     newfiles=[]
-    KD_pattern=re.compile('[A-Za-z0-9]+')
+    newdir=path+'Collection'
+    i_dirs=[]
+    oldpath=[]
+    newpath=[]
     one_up=go_one_up(path)
-    #FOV_pattern=re.compile('[0-9]+')
-    for i in onlydirs:
-        #dont look in collection folder
-        foldername= vars()['i'].split('/')[-1]
-        if foldername != 'Collection' and foldername!= 'Flatfield' and foldername!= 'Not_segmented'  and foldername!= 'HierarchicalCluster' and foldername!= 'segmentation_errors':
-            matched_foldername=re.match(KD_pattern, foldername)
-            if matched_foldername is not None:                           
-                #look in each folder and create a list of the paths, if it is a folder
-                i_dirs=[os.path.join(i, folder) for folder in os.listdir(i) if os.path.isdir(os.path.join(i, folder))]
-                for item in i_dirs:
-                    #get the identifier from the folder
-                    pathlist=vars()['item'].split('/')
-                    identifier=pathlist[-2]+'_'+pathlist[-1]
-                    i_path=item+'/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
+    for root, dirs, files in os.walk(path):
+        if findfile in files:
+            i_dirs.append(root)
+            for item in i_dirs:
+                folderpath=item.replace(path, '')
+                foldername=vars()['folderpath'].split('/')[1]
+                pathlist=vars()['item'].split('/')
+                identifier=pathlist[-2]+'_'+pathlist[-1]
+                i_path=item+'/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
+                try:
+                    oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                              if re.search(tifind, f) is not None ]
+                    newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                              if re.search(tifind, f) is not None ]                
+                except (NotADirectoryError, FileNotFoundError) as e :
+                    print('Error in', i_path, '\n', 'no segmentation found')
                     
-                    #get the folder inside                                      
-                    try:
-                        oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                                  if re.search(tifind, f) is not None ]
-                        newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                                  if re.search(tifind, f) is not None ]
-                        
-                        
-                    except (NotADirectoryError, FileNotFoundError) as e :
-                        print('Error in', i_path, '\n', 'no segmentation found')
-                        
-                        dump=os.path.join(one_up+'Not_segmented/')
-                        createFolder(dump)
-                        final_dump=os.path.join(dump+foldername+'/')
-                        print(item, 'moved to', final_dump, '\n')
-                        createFolder(final_dump)
-                        move(item, final_dump)            
-                        next
+                    dump=os.path.join(one_up+'Not_segmented/')
+                    createFolder(dump)
+                    final_dump=os.path.join(dump+foldername+'/')
+                    print(item, 'moved to', final_dump, '\n')
+                    createFolder(final_dump)
+                    move(item, final_dump)            
+                    next
                     [oldpath.append(f) for f in oldfiles]
-                    [newpath.append(f) for f in newfiles]
-    #print(oldpath, newpath)
+                    [newpath.append(f) for f in newfiles]        
     return oldpath, newpath
+
+        
+# =============================================================================
+# def get_move_paths(path):
+#     createFolder(path+'/Collection')
+#     onlydirs=[os.path.join(path, f) for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
+#     oldpath=[]
+#     newpath=[]
+#     tifind=re.compile('.png')
+#     newdir=path+'Collection'
+#     oldfiles=[]
+#     newfiles=[]
+#     KD_pattern=re.compile('[A-Za-z0-9]+')
+#     one_up=go_one_up(path)
+#     #FOV_pattern=re.compile('[0-9]+')
+#     for i in onlydirs:
+#         #dont look in collection folder
+#         foldername= vars()['i'].split('/')[-1]
+#         if foldername != 'Collection' and foldername!= 'Flatfield' and foldername!= 'Not_segmented'  and foldername!= 'HierarchicalCluster' and foldername!= 'segmentation_errors':
+#             matched_foldername=re.match(KD_pattern, foldername)
+#             if matched_foldername is not None:                           
+#                 #look in each folder and create a list of the paths, if it is a folder
+#                 i_dirs=[os.path.join(i, folder) for folder in os.listdir(i) if os.path.isdir(os.path.join(i, folder))]
+#                 for item in i_dirs:
+#                     #get the identifier from the folder
+#                     pathlist=vars()['item'].split('/')
+#                     identifier=pathlist[-2]+'_'+pathlist[-1]
+#                     i_path=item+'/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
+#                     
+#                     #get the folder inside                                      
+#                     try:
+#                         oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+#                                   if re.search(tifind, f) is not None ]
+#                         newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+#                                   if re.search(tifind, f) is not None ]
+#                         
+#                         
+#                     except (NotADirectoryError, FileNotFoundError) as e :
+#                         print('Error in', i_path, '\n', 'no segmentation found')
+#                         
+#                         dump=os.path.join(one_up+'Not_segmented/')
+#                         createFolder(dump)
+#                         final_dump=os.path.join(dump+foldername+'/')
+#                         print(item, 'moved to', final_dump, '\n')
+#                         createFolder(final_dump)
+#                         move(item, final_dump)            
+#                         next
+#                     [oldpath.append(f) for f in oldfiles]
+#                     [newpath.append(f) for f in newfiles]
+#     #print(oldpath, newpath)
+#     return oldpath, newpath
+# =============================================================================
 
 def copy_file(path):
     '''
