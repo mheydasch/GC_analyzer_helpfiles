@@ -19,6 +19,7 @@ import os
 import re
 from shutil import copyfile
 from shutil import move
+import shutil 
 
 import argparse
 #path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
@@ -69,10 +70,11 @@ def get_move_paths(path):
             i_dirs.append(root)
             for item in i_dirs:
                 folderpath=item.replace(path, '')
-                foldername=vars()['folderpath'].split('/')[1]
-                pathlist=vars()['item'].split('/')
-                identifier=pathlist[-2]+'_'+pathlist[-1]
-                i_path=item+'/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
+                folderlist=vars()['folderpath'].split('/')
+                foldername=os.path.join(*folderlist[:-1])
+                #pathlist=vars()['item'].split('/')
+                identifier=foldername.replace('/', '_')
+                i_path=item + '/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1/'
                 try:
                     oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                               if re.search(tifind, f) is not None ]
@@ -80,17 +82,21 @@ def get_move_paths(path):
                               if re.search(tifind, f) is not None ]                
                 except (NotADirectoryError, FileNotFoundError) as e :
                     print('Error in', i_path, '\n', 'no segmentation found')
-                    
-                    dump=os.path.join(one_up+'Not_segmented/')
+
+                    dump=one_up+'Not_segmented/'
                     createFolder(dump)
-                    final_dump=os.path.join(dump+foldername+'/')
+                    final_dump=dump+foldername+'/'
                     print(item, 'moved to', final_dump, '\n')
                     createFolder(final_dump)
-                    move(item, final_dump)            
+                    move(item, final_dump)    
+
+
                     next
-                    [oldpath.append(f) for f in oldfiles]
-                    [newpath.append(f) for f in newfiles]        
-    return oldpath, newpath
+                [oldpath.append(f) for f in oldfiles]
+                [newpath.append(f) for f in newfiles]  
+
+                
+    return oldpath, newpath, newdir
 
         
 # =============================================================================
@@ -143,17 +149,18 @@ def get_move_paths(path):
 #     #print(oldpath, newpath)
 #     return oldpath, newpath
 # =============================================================================
-
+#if vars()['i1'].split('/')[-7] in vars()['i2'].split('/')[-1]:
 def copy_file(path):
     '''
     oldpath: list of paths+filename in which folders are seperated by '/'
             4th element from the back must be identifier of the file
     newpath: list of paths+filename. file must contain identifier
     '''
-    oldpath, newpath=get_move_paths(path)
-    for i1, i2 in zip(oldpath, newpath):
-            if vars()['i1'].split('/')[-7] in vars()['i2'].split('/')[-1]:
-                copyfile(i1, i2)
+   
+    oldpath, newpath, newdir=get_move_paths(path)
+    createFolder(newdir)
+    for i1, i2 in zip(oldpath, newpath):    
+        shutil.copyfile(i1, i2)
 
 def read_text(errors):
     '''
