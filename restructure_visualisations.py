@@ -159,8 +159,10 @@ def copy_file(path):
    
     oldpath, newpath, newdir=get_move_paths(path)
     createFolder(newdir)
-    for i1, i2 in zip(oldpath, newpath):    
-        shutil.copyfile(i1, i2)
+    for i1, i2 in zip(oldpath, newpath):
+        if os.path.isdir(i1):
+            shutil.copytree(i1, i2, symlinks=False, ignore=None)  
+            
 
 def read_text(errors):
     '''
