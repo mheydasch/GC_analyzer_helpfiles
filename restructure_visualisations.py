@@ -20,6 +20,7 @@ import re
 from shutil import copyfile
 from shutil import move
 import shutil 
+from distutils.dir_util import copy_tree
 
 import argparse
 #path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
@@ -161,7 +162,7 @@ def copy_file(path):
     createFolder(newdir)
     for i1, i2 in zip(oldpath, newpath):
         if os.path.isdir(i1):
-            shutil.copytree(i1, i2, symlinks=False, ignore=None)  
+            copy_tree(i1, i2)  
             
 
 def read_text(errors):
