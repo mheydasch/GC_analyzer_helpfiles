@@ -20,7 +20,7 @@ import re
 from shutil import copyfile
 from shutil import move
 import shutil 
-import distutils
+from distutils.dir_util import copy_tree
 
 import argparse
 #path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
@@ -89,7 +89,7 @@ def get_move_paths(path):
                     final_dump=dump+foldername+'/'
                     print(item, 'moved to', final_dump, '\n')
                     createFolder(final_dump)
-                    distutils.dir_util.copy_tree(item, final_dump) 
+                    copy_tree(item, final_dump) 
                     shutil.rmtree(item)
 
 
