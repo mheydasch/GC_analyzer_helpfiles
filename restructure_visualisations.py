@@ -89,8 +89,9 @@ def get_move_paths(path):
                     final_dump=dump+foldername+'/'
                     print(item, 'moved to', final_dump, '\n')
                     createFolder(final_dump)
-                    copy_tree(item, final_dump) 
-                    shutil.rmtree(item)
+                    if os.path.isdir(item):
+                        copy_tree(item, final_dump) 
+                        shutil.rmtree(item)
 
 
                     next
