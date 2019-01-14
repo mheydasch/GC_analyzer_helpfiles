@@ -64,38 +64,47 @@ def parseArguments():
   return(args)
   
 
-
 def get_folders():
-    '''
-    finds the folders based on the folder architecture
-    path/Knockdown/FoV/Channels/
-    
-    '''
-    KD_pattern=re.compile('[A-Za-z0-9]+')
-    FOV_pattern=re.compile('[0-9]+')
-    #find all folders in the given path
-    folders=[os.path.join(path, f) for f in os.listdir(path) if os.path.isdir]
-    Wellfolders=[]
+    findfile='movieData.mat'
     Fovfolders=[]
-    #select them based on the KD pattern
-    for k in folders:
-        if 'Flatfield' not in k:            
-            foldername = vars()['k'].split('/')[-1]
-            foldername=re.match(KD_pattern, foldername)
-            if foldername is not None and os.path.isdir(k):
-                Wellfolders.append(k)
-    #find all folders in the Wellfolders
-    for well in Wellfolders:
-        if os.path.isdir(well):
-            for i in os.listdir(well):
-                i=os.path.join(well, i)        
-                if os.path.isdir(i):
-                    foldername = vars()['i'].split('/')[-1]
-                    foldername=re.match(FOV_pattern, foldername)
-                    if foldername is not None:
-                        if os.path.isdir(i):
-                            Fovfolders.append(i)
+    for root, dirs, files in os.walk(path):
+        if findfile in files:
+            Fovfolders.append(root)
     return Fovfolders
+
+# =============================================================================
+# def get_folders():
+#     '''
+#     finds the folders based on the folder architecture
+#     path/Knockdown/FoV/Channels/
+#     
+#     '''
+#     KD_pattern=re.compile('[A-Za-z0-9]+')
+#     FOV_pattern=re.compile('[0-9]+')
+#     #find all folders in the given path
+#     folders=[os.path.join(path, f) for f in os.listdir(path) if os.path.isdir]
+#     Wellfolders=[]
+#     Fovfolders=[]
+#     #select them based on the KD pattern
+#     for k in folders:
+#         if 'Flatfield' not in k:            
+#             foldername = vars()['k'].split('/')[-1]
+#             foldername=re.match(KD_pattern, foldername)
+#             if foldername is not None and os.path.isdir(k):
+#                 Wellfolders.append(k)
+#     #find all folders in the Wellfolders
+#     for well in Wellfolders:
+#         if os.path.isdir(well):
+#             for i in os.listdir(well):
+#                 i=os.path.join(well, i)        
+#                 if os.path.isdir(i):
+#                     foldername = vars()['i'].split('/')[-1]
+#                     foldername=re.match(FOV_pattern, foldername)
+#                     if foldername is not None:
+#                         if os.path.isdir(i):
+#                             Fovfolders.append(i)
+#     return Fovfolders
+# =============================================================================
 #%%            
 def create_parameter_call():
     '''

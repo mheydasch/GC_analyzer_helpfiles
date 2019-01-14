@@ -76,30 +76,36 @@ def get_move_paths(path):
                 #pathlist=vars()['item'].split('/')
                 identifier=foldername.replace('/', '_')
                 i_path=item + '/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1/'
-                try:
-                    oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                              if re.search(tifind, f) is not None ]
-                    newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                              if re.search(tifind, f) is not None ]                
-                except (NotADirectoryError, FileNotFoundError) as e :
-                    print('Error in', i_path, '\n', 'no segmentation found')
-
-                    dump=one_up+'Not_segmented/'
-                    createFolder(dump)
-                    final_dump=dump+foldername+'/'
-                    print(item, 'moved to', final_dump, '\n')
-                    createFolder(final_dump)
-                    if os.path.isdir(item):
-                        copy_tree(item, final_dump) 
-                        shutil.rmtree(item)
+                if os.path.isdir(i_path):
+                    try:
+                        oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                                  if re.search(tifind, f) is not None ]
+                        newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
+                                  if re.search(tifind, f) is not None ]                
+                    except (NotADirectoryError, FileNotFoundError) as e :
+                        print('Error in', i_path, '\n', 'no segmentation found')
+                        move_dirs(item, one_up, foldername)
+                        next
+                else:
+                     move_dirs(item, one_up, foldername)
 
 
-                    next
+                        
                 [oldpath.append(f) for f in oldfiles]
                 [newpath.append(f) for f in newfiles]  
 
                 
     return oldpath, newpath, newdir
+
+def move_dirs(item, one_up, foldername):
+    dump=one_up+'Not_segmented/'
+    createFolder(dump)
+    final_dump=dump+foldername+'/'
+    print(item, 'moved to', final_dump, '\n')
+    createFolder(final_dump)
+    if os.path.isdir(item):
+        copy_tree(item, final_dump) 
+        shutil.rmtree(item)
 
         
 # =============================================================================
