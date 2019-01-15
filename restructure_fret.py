@@ -30,10 +30,10 @@ def createFolder(directory):
 
 def get_folders(path):
     Fovfolders={}
-    FRET='/GrowthConeAnalyzer/BiosensorPackage/GCAFeatureExtraction/Descriptor/FRETRatioValues/Movie'
+    FRET='/GrowthConeAnalyzer/BiosensorPackage/GCAFeatureExtraction/Descriptor/FRETRatioValues/Movie/colorBar'
     png_find='.png'
     for root, dirs, files in os.walk(path):
-        if FRET in root and 'colorBar' not in root:
+        if FRET in root: 
             for f in files:
                 if png_find in f:
                     graph=os.path.join(root, f)
