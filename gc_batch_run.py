@@ -65,7 +65,7 @@ def parseArguments():
   
 
 def get_folders():
-    findfile='movieData.mat'
+    findfile='cropRegion.mat'
     Fovfolders=[]
     for root, dirs, files in os.walk(path):
         if findfile in files:
