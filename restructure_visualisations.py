@@ -74,20 +74,21 @@ def get_move_paths(path):
                 folderlist=vars()['folderpath'].split('/')
                 foldername=os.path.join(*folderlist[:-1])
                 #pathlist=vars()['item'].split('/')
-                identifier=foldername.replace('/', '_')
-                i_path=item + '/GrowthConeAnalyzer/GCAMainVisualization/filoLength/ForMainMovie_Feature_Movie/Channel1Detect_OverlaidOnChannel1__/'
+                identifier=folderpath.replace('/', '_')
+                i_path=os.path.join(item, 'GrowthConeAnalyzer', 'GCAMainVisualization', 'filoLength','ForMainMovie_Feature_Movie', 'Channel1Detect_OverlaidOnChannel1__' )
                 if os.path.isdir(i_path):
                     try:
                         oldfiles=[os.path.join(i_path, f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
                                   if re.search(tifind, f) is not None ]
                         newfiles=[os.path.join(newdir, identifier+'_'+f) for f in os.listdir(i_path) if os.path.isfile(os.path.join(i_path, f))\
-                                  if re.search(tifind, f) is not None ]                
+                                  if re.search(tifind, f) is not None ] 
+
                     except (NotADirectoryError, FileNotFoundError) as e :
                         print('Error in', i_path, '\n', 'no segmentation found')
                         move_dirs(item, one_up, foldername)
                         next
-                else:
-                     move_dirs(item, one_up, foldername)
+                #else:
+                     #move_dirs(item, one_up, foldername)
 
 
                         
@@ -98,9 +99,9 @@ def get_move_paths(path):
     return oldpath, newpath, newdir
 
 def move_dirs(item, one_up, foldername):
-    dump=one_up+'Not_segmented/'
+    dump=os.path.join(one_up,'Not_segmented/')
     createFolder(dump)
-    final_dump=dump+foldername+'/'
+    final_dump=os.path.join(dump, foldername)
     print(item, 'moved to', final_dump, '\n')
     createFolder(final_dump)
     if os.path.isdir(item):
