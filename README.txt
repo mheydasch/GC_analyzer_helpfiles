@@ -32,14 +32,14 @@ Put one name per line only!
 Works independent of the amount of subfolders.
 
 gc_batch_run.py:
-Goal of this function is to 
+Goal of this function is to allow batch processing of all the movies of an experiment together after cropping.
 
 Accepts as inputs:
 -h to show the help documentation
 -d, the directory where your cropped images are stored
 -m, the modality you want to image with (this determines the segmentation parameter file that will get loaded. This is hardcoded
 	for 4 default ones. Alternatively one can give the full path to a different file.
-	the path to the default ones obviously needs to be adjusted for every user. This 	is easy to do by changing the respective line in the code.)
+	the path to the default ones obviously needs to be adjusted for every user. This is easy to do by changing the respective line in the code.)
 -s, the directory where your shade correction files are stored. This is only applicable for the biosensors modality
 
 A call can look something like this:
@@ -51,7 +51,7 @@ To start the batch process you then have to type:
 slurm job_files/batch.sl 
 
 restructure_actin.py: Takes the first image of channel1 of each cropped movie
-			 and copies it into a collection folder, so one can look at all 			 the movies again.
+			 and copies it into a collection folder, so one can look at all the movies again.
 
 restructure_graphs.py: Takes all .png files in the current folder (preferential output of the graph folder) and copies them into a collection folder, so one can easier view all the graphs together.
 
@@ -68,6 +68,8 @@ Patterns might need to be adjusted depending on the original file names.
 GetOriginalName.py:
 To be used after Growth Cone analyzer has cropped the blinded videos
 to get back the original well names by using the .csv file created by rename_Si_blinded.py
+
+
 
 
 
