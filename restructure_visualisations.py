@@ -87,8 +87,10 @@ def get_move_paths(path):
                         print('Error in', i_path, '\n', 'no segmentation found')
                         move_dirs(item, one_up, foldername)
                         next
-                #else:
-                     #move_dirs(item, one_up, foldername)
+                else:
+                     print('Error in', i_path, '\n', 'no segmentation found')
+                     move_dirs(item, one_up, foldername)
+                     next
 
 
                         
