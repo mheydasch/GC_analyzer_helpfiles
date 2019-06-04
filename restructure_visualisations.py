@@ -25,7 +25,7 @@ from distutils.dir_util import copy_tree
 import argparse
 #path='/Users/max/Desktop/Office/Phd/Data/N1E_115/SiRNA/SiRNA_28/timelapse/analyzed/GC_ran/'
 
-
+#%%
 
 def parseArguments():
   # Define the parser and read arguments
@@ -72,7 +72,7 @@ def get_move_paths(path):
             for item in i_dirs:
                 folderpath=item.replace(path, '')
                 folderlist=vars()['folderpath'].split('/')
-                foldername=os.path.join(*folderlist[:-1])
+                foldername=os.path.join(*folderlist)
                 #pathlist=vars()['item'].split('/')
                 identifier=folderpath.replace('/', '_')
                 i_path=os.path.join(item, 'GrowthConeAnalyzer', 'GCAMainVisualization', 'filoLength','ForMainMovie_Feature_Movie', 'Channel1Detect_OverlaidOnChannel1__' )
@@ -103,12 +103,17 @@ def get_move_paths(path):
 def move_dirs(item, one_up, foldername):
     dump=os.path.join(one_up,'Not_segmented/')
     createFolder(dump)
-    final_dump=os.path.join(dump, foldername)
-    print(item, 'moved to', final_dump, '\n')
+    final_dump=os.path.join(dump, foldername)   
     createFolder(final_dump)
     if os.path.isdir(item):
-        copy_tree(item, final_dump) 
-        shutil.rmtree(item)
+        #new_location=os.path.join(final_dump, foldername)
+        try:
+            copy_tree(item, final_dump) 
+            print(item, 'moved to', final_dump, '\n')
+            #shutil.rmtree(item)
+        except FileExistsError as e:
+            print(e)
+            next        
 
         
 # =============================================================================
