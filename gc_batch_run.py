@@ -141,7 +141,7 @@ def create_matlab_call():
             matlab_call= 'srun /opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
             calls.append(matlab_call)
         else:
-            function_call='\"GCARunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', \'{}\', \'OutputDirectory\', \'{}\', {}'.format(i+'/Channels/', i+'/', create_parameter_call())
+            function_call='\GCARunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', \'{}\', \'OutputDirectory\', \'{}\', {}'.format(i+'/Channels/', i+'/', create_parameter_call())
             matlab_call= '/opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r \"addpath(genpath(\'/home/mheydasch/Scripts/GC_run/GrowthConeAnalyzerRelease_0.2\'));  {}'.format(function_call)
             calls.append(matlab_call)
     return calls
