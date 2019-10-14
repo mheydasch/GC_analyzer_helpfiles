@@ -120,11 +120,11 @@ def create_parameter_call():
                      'FRET' : '\'/home/mheydasch/Scripts/GrowthConeAnalyzerRelease_0.2/parameter_files/GCALoadParameters_60x_mult_channels.m\''}
     if modality in parameter_files:
         #part of the final matlab call!
-        parameter_call="\'parameterMfile\', " +parameter_files[modality] +')); quit\"'
+        parameter_call="\'parameterMfile\', " +parameter_files[modality] +'); quit\"'
     if modality.startswith('/'):
-        parameter_call="\'parameterMfile\', " + "\'" + modality+"\'" +')); quit\"' 
+        parameter_call="\'parameterMfile\', " + "\'" + modality+"\'" +'); quit\"' 
     if modality=='biosensors':
-        parameter_call="\'InputDirFF\', " + "\'" + shade_correction+"\'" +')); quit\"'
+        parameter_call="\'InputDirFF\', " + "\'" + shade_correction+"\'" +'); quit\"'
     
     return parameter_call
 
@@ -137,12 +137,12 @@ def create_matlab_call():
     calls=[]
     for i in get_folders():
         if modality=='biosensors':
-            function_call='\"run(GCARunBiosensorAnalysis(\'InputPath\', \'{}\', {}'.format(i + '/GrowthConeAnalyzer/movieData.mat', create_parameter_call())  
+            function_call='\GCARunBiosensorAnalysis(\'InputPath\', \'{}\', {}'.format(i + '/GrowthConeAnalyzer/movieData.mat', create_parameter_call())  
             matlab_call= 'srun /opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
             calls.append(matlab_call)
         else:
-            function_call='\"run(GCARunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', \'{}\', \'OutputDirectory\', \'{}\', {}'.format(i+'/Channels/', i+'/', create_parameter_call())
-            matlab_call= '/opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r  {}'.format(function_call)
+            function_call='\"GCARunFullPipeline(\'multChannels\', true, \'ChannelDirectory\', \'{}\', \'OutputDirectory\', \'{}\', {}'.format(i+'/Channels/', i+'/', create_parameter_call())
+            matlab_call= '/opt/local/MATLAB/R2016b/bin/matlab -nodisplay -nosplash -nodesktop -noFigureWindows -r \"addpath(genpath(\'/home/mheydasch/Scripts/GC_run/GrowthConeAnalyzerRelease_0.2\'));  {}'.format(function_call)
             calls.append(matlab_call)
     return calls
 
